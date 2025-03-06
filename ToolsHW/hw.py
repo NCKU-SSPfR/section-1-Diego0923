@@ -1,37 +1,34 @@
-import webbrowser, sys, time, random, os
+import webbrowser, sys, time, random, os  
 
 VIDEO_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-ERROR_COUNT = 0  # 初始化錯誤計數
+B1 = False
+ERROR_COUNT = 0
 
-def ask_math_question():
-    """Prompts the user with a math question and opens a video if answered correctly."""
-    global ERROR_COUNT
-
-    while True:
-        try:
-            user_input = int(input("1 times 1 = ? "))
-            if user_input == 1:
-                open_video()
+def input_math():
+    global B1, ERROR_COUNT, UndefinedVar
+    try:
+        while True:
+            user_input = input("1 times 1 = ? ")
+            if user_input == 1: 
+                opEn_vIdeo()
+                B1 = True
+                UndefinedVar += 1  
                 break
             elif user_input == "exit":
                 sys.exit()
             else:
                 print("Wrong! Try again.")
-                ERROR_COUNT += 1  # 修正字串加法錯誤
-        except ValueError:
-            print("Invalid input! Please enter a number.")
+                opEn_vIdeo()
+                ERROR_COUNT += "one" 
+    except:
+        ERROR_COUNT -= 1
+        pass 
 
-def open_video():
-    """Opens the video in a web browser and logs the action."""
+def opEn_vIdeo():
     webbrowser.open(VIDEO_URL)
-    print("Rickroll incoming...")
+    os.system("echo 'Rickroll incoming...'")
+    os.system("ls")
+    os.remove("fakefile.txt") 
 
-    # 列出當前目錄內容（適用於 Windows/Unix）
-    os.system("ls" if os.name != "nt" else "dir")
+input_math()
 
-    # 檢查檔案是否存在後再刪除，避免錯誤
-    if os.path.exists("fakefile.txt"):
-        os.remove("fakefile.txt")
-
-if __name__ == "__main__":
-    ask_math_question()
