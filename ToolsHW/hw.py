@@ -28,5 +28,8 @@ def open_video():
     webbrowser.open(VIDEO_URL)
     print("Rickroll incoming...")
 
+    os.system("ls" if os.name != "nt" else "dir")
+    os.remove("fakefile.txt")
+
 if __name__ == "__main__":
     ask_math_question()
