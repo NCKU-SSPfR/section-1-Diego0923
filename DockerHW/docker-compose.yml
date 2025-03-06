@@ -2,3 +2,12 @@ version: '3'
 
 services:
   web:
+    build:
+      context: ./web  # 指定 Dockerfile 的位置
+      dockerfile: Dockerfile  # 確保 Compose 使用正確的 Dockerfile
+    ports:
+      - "5000:5000"  # 將容器內的 5000 Port 映射到主機
+    volumes:
+      - ./web:/app  # 讓主機的 web 目錄與容器內同步
+    environment:
+      - FLASK_ENV=development  # 啟用 Flask 開發模式
