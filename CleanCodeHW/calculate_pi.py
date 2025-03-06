@@ -11,9 +11,9 @@ inside_circle_count = 0
 
 # Randomly generate points and count those inside the circle
 for point in range(NUM_POINTS):
-    x_coordinate = random.uniform(-RADIUS, RADIUS)
-    y_coordinate = random.uniform(-RADIUS, RADIUS)
-    if x_coordinate**SQUARE_EXPONENT + y_coordinate**SQUARE_EXPONENT <= RADIUS**SQUARE_EXPONENT:
+    x = random.uniform(-RADIUS, RADIUS)
+    y = random.uniform(-RADIUS, RADIUS)
+    if x**SQUARE_EXPONENT + y**SQUARE_EXPONENT <= RADIUS**SQUARE_EXPONENT:
         inside_circle_count += POINT_COUNT_INCREMENT
 
 # Estimate pi based on the number of points inside the circle
