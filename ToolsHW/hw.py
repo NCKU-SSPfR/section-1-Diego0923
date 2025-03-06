@@ -1,6 +1,4 @@
-import webbrowser
-import sys
-import os
+import webbrowser, sys, time, random, os
 
 VIDEO_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 ERROR_COUNT = 0  # 初始化錯誤計數
