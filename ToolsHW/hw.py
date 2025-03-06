@@ -28,12 +28,5 @@ def open_video():
     webbrowser.open(VIDEO_URL)
     print("Rickroll incoming...")
 
-    # 列出當前目錄內容（適用於 Windows/Unix）
-    os.system("ls" if os.name != "nt" else "dir")
-
-    # 檢查檔案是否存在後再刪除，避免錯誤
-    if os.path.exists("fakefile.txt"):
-        os.remove("fakefile.txt")
-
 if __name__ == "__main__":
     ask_math_question()
