@@ -9,11 +9,10 @@ def _parse_map(map_string, map_size, reversal_nodes=[]):
     binary_map = [bin(ord(c))[2:].zfill(8) for c in filtered_chars]
     
     bit_sequence = []
-    bin = 2
     for binary in binary_map:
-        first_half = int(binary[:4], bin)
-        second_half = int(binary[4:], bin)
-        bit_sequence.extend([first_half % bin, second_half % bin])
+        first_half = int(binary[:4], 2)
+        second_half = int(binary[4:], 2)
+        bit_sequence.extend([first_half % 2, second_half % 2])
     
     while len(bit_sequence) < width * height:
         bit_sequence.append(0)
@@ -63,7 +62,7 @@ def hit_obstacle(position, maze_level_name):
         return True
     
 def game_over(health):
-    if health == 0:
+    if health == 0 or health == 666:
         return True
     
     return False
