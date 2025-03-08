@@ -78,7 +78,7 @@ services:
       - ./backend:/app  # Maps local backend folder to /app in the container
     ports:
       - "8000:8000"
-    command: uvicorn src.main:app --host "0.0.0.0" --port 8000 --reload"
+    command: uvicorn src.main:app --host "0.0.0.0" --port 8000 --reload
     
 networks:
   sonar-network:
