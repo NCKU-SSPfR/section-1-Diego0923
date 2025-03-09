@@ -19,7 +19,8 @@ async def login_request():
 
 async def reset_request():
     """Reset Game state"""
-
+    
+    global game_state
     async with httpx.AsyncClient() as client:
         response = await client.get(RESET_URL)
 
@@ -30,6 +31,7 @@ async def reset_request():
 async def move_request(dir):
     """Simulates a frontend move request."""
 
+    global game_state
     payload = {"username": USERNAME, "direction": dir}
     
     async with httpx.AsyncClient() as client:
