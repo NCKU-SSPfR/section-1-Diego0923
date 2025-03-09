@@ -1,29 +1,35 @@
-version: "3"
+version: "3.8"
 
 services:
   db:
     image: postgres:13
-    environment:
-      - POSTGRES_USER=sonar
-      - POSTGRES_PASSWORD=sonar
-      - POSTGRES_DB=sonarqube
+    env_file:
+      - .env  # Secure credentials
     networks:
       - sonar-network
-  
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+
   sonarqube:
     image: sonarqube:lts-community
     container_name: sonarqube
     ports:
       - "9000:9000"
-    environment:
-      - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
-      - SONAR_JDBC_USERNAME=sonar
-      - SONAR_JDBC_PASSWORD=sonar
-      - SONAR_FORCE_BUILTIN_PLUGINS=false
+    env_file:
+      - .env
     networks:
       - sonar-network
     depends_on:
       - db
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
 
   pylint-flake8:
     image: python:3.11-slim
@@ -37,13 +43,17 @@ services:
       mkdir -p /reports &&
       pylint --output-format=json /usr/src/**/*.py > /reports/pylint-report.json || true &&
       flake8 --format=json /usr/src > /reports/flake8-report.json || true
+      "
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
 
   sonar-scanner:
     image: sonarsource/sonar-scanner-cli
     depends_on:
       - sonarqube
-    environment:
-      - SONAR_HOST_URL=http://sonarqube:9000
+    env_file:
+      - .env
     volumes:
       - ./backend:/usr/src
       - ./reports:/reports
@@ -61,24 +71,43 @@ services:
       -Dsonar.qualitygate.wait=true
     networks:
       - sonar-network
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
 
   frontend:
     build: ./frontend
     volumes:
-      - ./frontend:/app  # Maps local frontend folder to /app in the container
+      - ./frontend:/app
     ports:
       - "8088:8088"
-    command: uvicorn src.main:app --host "0.0.0.0" --port 8088 --reload
+    command: uvicorn src.main:app --host "0.0.0.0" --port 8088 --workers 2
     depends_on:
-      - backend  # Ensures backend starts before frontend
+      - backend
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
 
   backend:
     build: ./backend
     volumes:
-      - ./backend:/app  # Maps local backend folder to /app in the container
+      - ./backend:/app
     ports:
       - "8000:8000"
-    command: uvicorn src.main:app --host "0.0.0.0" --port 8000 --reload
-    
+    command: uvicorn src.main:app --host "0.0.0.0" --port 8000 --workers 2
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+
 networks:
   sonar-network:
