@@ -1,24 +1,16 @@
 # TODO: Install the backend dependency package into the app folder inside the container.
-# Use the official Python image as a base
-# Use a smaller base image
+
 FROM python:3.11
 
-# Set a non-root user for security
-RUN useradd --create-home appuser
 WORKDIR /app
-USER appuser
 
-# Copy only necessary files (avoid copying sensitive data)
-COPY requirements.txt /app/
+COPY ./requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
-# Pin dependencies to prevent supply chain attacks
-RUN pip install --no-cache-dir -r requirements.txt
+RUN useradd -m -u 1000 myuser
+RUN chown -R myuser:myuser /app
 
-# Copy application source code
-COPY src /app/src
-COPY config /app/config
-
-# Expose the backend port
-EXPOSE 8000
+COPY --chown=myuser:myuser ./src/ /app/src
+USER myuser
 
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
