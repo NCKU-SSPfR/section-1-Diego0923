@@ -1,26 +1,16 @@
 # TODO: Install the frontend dependency package into the app folder inside the container.
 # Use the official Python image as a base
-# Use a smaller base image
-FROM python:3.11-slim
+FROM python:3.11
 
-# Set a non-root user for security
-RUN useradd --create-home appuser
 WORKDIR /app
-USER appuser
 
-# Copy only necessary files (avoid copying sensitive data)
-COPY requirements.txt /app/
+COPY ./requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
-# Pin dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN useradd -m -u 1000 myuser
+RUN chown -R myuser:myuser /app
 
-# Copy application source code
-COPY src /app/src
-COPY config /app/config
+COPY --chown=myuser:myuser ./src/ /app/src
+USER myuser
 
-# Expose the frontend port
-EXPOSE 8088
-
-# Run application with limited privileges
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8088", "--reload"]
-
