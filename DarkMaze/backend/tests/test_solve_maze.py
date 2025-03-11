@@ -56,10 +56,6 @@ async def test_integration():
 async def test_solver():
     await login_request()
     await reset_request()
-    @pytest.mark.asyncio
- async def test_solver():
-     await login_request()
-     await reset_request()
      for i in range(5):
          await move_request("down")
      await move_request("right")
